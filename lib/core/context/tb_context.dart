@@ -15,6 +15,8 @@ import 'package:thingsboard_client/thingsboard_client.dart';
 import 'package:thingsboard_app/utils/services/tb_app_storage.dart';
 import 'package:thingsboard_app/core/context/tb_context_widget.dart';
 
+import '../../generated/l10n.dart';
+
 enum NotificationType { info, warn, success, error }
 
 class TbLogOutput extends LogOutput {
@@ -99,7 +101,6 @@ abstract class TbMainDashboardHolder {
 
 class TbContext {
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  bool _initialized = false;
   bool isUserLoaded = false;
   final ValueNotifier<bool> _isAuthenticated = ValueNotifier(false);
   PlatformType? _oauth2PlatformType;
@@ -110,16 +111,16 @@ class TbContext {
   final _isLoadingNotifier = ValueNotifier<bool>(false);
   final _log = TbLogger();
   late final _widgetActionHandler;
-  late final AndroidDeviceInfo? _androidInfo;
-  late final IosDeviceInfo? _iosInfo;
-  late final String packageName;
+  late AndroidDeviceInfo? _androidInfo;
+  late IosDeviceInfo? _iosInfo;
+  late String packageName;
   TbMainDashboardHolder? _mainDashboardHolder;
   bool _closeMainFirst = false;
 
   GlobalKey<ScaffoldMessengerState> messengerKey =
       GlobalKey<ScaffoldMessengerState>();
-  late final ThingsboardClient tbClient;
-  late final TbOAuth2Client oauth2Client;
+  late ThingsboardClient tbClient;
+  late TbOAuth2Client oauth2Client;
 
   final FluroRouter router;
   final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
@@ -134,13 +135,6 @@ class TbContext {
   WidgetActionHandler get widgetActionHandler => _widgetActionHandler;
 
   Future<void> init() async {
-    assert(() {
-      if (_initialized) {
-        throw StateError('TbContext already initialized!');
-      }
-      return true;
-    }());
-    _initialized = true;
     var storage = createAppStorage();
     tbClient = ThingsboardClient(ThingsboardAppConstants.thingsBoardApiEndpoint,
         storage: storage,
@@ -227,7 +221,7 @@ class TbContext {
         style: TextStyle(color: textColor),
       ),
       action: SnackBarAction(
-        label: 'Close',
+        label: S.current.close,
         textColor: textColor,
         onPressed: () {
           messengerKey.currentState!
@@ -293,10 +287,10 @@ class TbContext {
       log.error('Error: $e', e, s);
       if (_isConnectionError(e)) {
         var res = await confirm(
-            title: 'Connection error',
-            message: 'Failed to connect to server',
-            cancel: 'Cancel',
-            ok: 'Retry');
+            title: S.current.context_conn_err_title,
+            message: S.current.context_conn_err_info,
+            cancel: S.current.cancel,
+            ok: S.current.retry);
         if (res == true) {
           onUserLoaded();
         } else {
@@ -506,6 +500,8 @@ class TbContext {
       required String message,
       String cancel = 'Cancel',
       String ok = 'Ok'}) {
+    if (cancel == 'Cancel') cancel = S.current.cancel;
+    if (ok == 'Ok') ok = S.current.ok;
     return showDialog<bool>(
         context: currentState!.context,
         builder: (context) => AlertDialog(

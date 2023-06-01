@@ -57,6 +57,35 @@ class _MorePageState extends TbContextState<MorePage> {
               Divider(color: Color(0xFFEDEDED)),
               SizedBox(height: 8),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                child: Container(
+                  height: 48,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 18),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Icon(Icons.language_sharp, color: Color(0xFF282828)),
+                        SizedBox(width: 34),
+                        Text(
+                          S.of(context).more_language,
+                          style: const TextStyle(
+                            color: Color(0xFF282828),
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            height: 20 / 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  navigateTo('/language');
+                },
+              ),
+              GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   child: Container(
                       height: 48,
@@ -66,7 +95,7 @@ class _MorePageState extends TbContextState<MorePage> {
                           child: Row(mainAxisSize: MainAxisSize.max, children: [
                             Icon(Icons.logout, color: Color(0xFFE04B2F)),
                             SizedBox(width: 34),
-                            Text('${S.of(context).logout}',
+                            Text(S.of(context).more_logout,
                                 style: TextStyle(
                                     color: Color(0xFFE04B2F),
                                     fontStyle: FontStyle.normal,
@@ -139,13 +168,13 @@ class _MorePageState extends TbContextState<MorePage> {
       var authority = user.authority;
       switch (authority) {
         case Authority.SYS_ADMIN:
-          name = '${S.of(context).systemAdministrator}';
+          name = S.of(context).more_sys_admin;
           break;
         case Authority.TENANT_ADMIN:
-          name = '${S.of(context).tenantAdministrator}';
+          name = S.of(context).more_tenant_admin;
           break;
         case Authority.CUSTOMER_USER:
-          name = '${S.of(context).customer}';
+          name = S.of(context).more_customer;
           break;
         default:
           break;
@@ -172,15 +201,15 @@ class MoreMenuItem {
         case Authority.TENANT_ADMIN:
           items.addAll([
             MoreMenuItem(
-                title: '${S.of(context).customers}',
+                title: S.current.customers,
                 icon: Icons.supervisor_account,
                 path: '/customers'),
             MoreMenuItem(
-                title: '${S.of(context).assets}',
+                title: S.current.assets,
                 icon: Icons.domain,
                 path: '/assets'),
             MoreMenuItem(
-                title: '${S.of(context).auditLogs}',
+                title: S.current.audit_logs,
                 icon: Icons.track_changes,
                 path: '/auditLogs')
           ]);
@@ -188,7 +217,7 @@ class MoreMenuItem {
         case Authority.CUSTOMER_USER:
           items.addAll([
             MoreMenuItem(
-                title: '${S.of(context).assets}',
+                title: S.current.assets,
                 icon: Icons.domain,
                 path: '/assets')
           ]);

@@ -11,8 +11,11 @@ import 'package:thingsboard_app/modules/dashboard/dashboard_routes.dart';
 import 'package:thingsboard_app/modules/device/device_routes.dart';
 import 'package:thingsboard_app/modules/home/home_routes.dart';
 import 'package:thingsboard_app/modules/profile/profile_routes.dart';
+import 'package:thingsboard_app/modules/language/language_routes.dart';
 import 'package:thingsboard_app/modules/tenant/tenant_routes.dart';
 import 'package:thingsboard_app/utils/ui_utils_routes.dart';
+
+import '../../generated/l10n.dart';
 
 class ThingsboardAppRouter {
   final router = FluroRouter();
@@ -23,8 +26,8 @@ class ThingsboardAppRouter {
         handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
       var settings = context!.settings;
       return Scaffold(
-        appBar: AppBar(title: Text('Not Found')),
-        body: Center(child: Text('Route not defined: ${settings!.name}')),
+        appBar: AppBar(title: Text(S.of(context).route_not_found)),
+        body: Center(child: Text(S.of(context).route_not_defined + '${settings!.name}')),
       );
     });
     InitRoutes(_tbContext).registerRoutes();
@@ -32,6 +35,7 @@ class ThingsboardAppRouter {
     UiUtilsRoutes(_tbContext).registerRoutes();
     HomeRoutes(_tbContext).registerRoutes();
     ProfileRoutes(_tbContext).registerRoutes();
+    LanguageRoutes(_tbContext).registerRoutes();
     AssetRoutes(_tbContext).registerRoutes();
     DeviceRoutes(_tbContext).registerRoutes();
     AlarmRoutes(_tbContext).registerRoutes();
