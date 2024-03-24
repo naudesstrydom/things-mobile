@@ -1,5 +1,5 @@
 abstract class ThingsboardAppConstants {
-  static final thingsBoardApiEndpoint = 'https://iot.arimacomm.com.tw';
+  static final thingsBoardApiEndpoint = 'http://localhost:8080';
   static final thingsboardOAuth2CallbackUrlScheme = 'org.thingsboard.app.auth';
 
   /// Not for production (only for debugging)
